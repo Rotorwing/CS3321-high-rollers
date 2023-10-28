@@ -22,22 +22,27 @@ class GameManager:
                 break
         
         self.games[id] = self._create_game_by_name(game)
+        return id
     
     def delete_game(self, id:str) -> BaseGame:
         return self.games.pop(id)
     
-    def handle_client_message(self, request:WSGIRequest):
+    def handle_client_message(self, request:WSGIRequest, game:str):
         """Send the client's message to the appropriate game"""
         message = request.GET.dict()
         print(message)
         response_message = ""
-        if message["id"] in self.games.keys():
-            if message["data"]:
+        if "data" in message and message["data"]:
+            if "id" in message and message["id"] in self.games.keys():
+                id =  message["id"]
                 response_message = self.games[id].handle_client_message(message["data"])
+            elif message["data"] == "newgame":
+                id = self.new_game(game)
+                response_message = {"id":id}
             else:
-                response_message = {"Error": "No data given!"}
+                response_message = {"Error": "No game with given ID found!"}
         else:
-            response_message = {"Error": "No game with given ID found!"}
+            response_message = {"Error": "No data given!"}
         
         return JsonResponse(response_message)
     
@@ -55,7 +60,6 @@ class GameManager:
         return out
     
     def _generate_id_char(self) -> str:
-        r = randrange(10+26*2) # 10 numbers, 26*2 letters
-        if (r < 10): return ord(r+48)
-        elif (r < 10+26): return ord(r+65)
-        else: return ord(r+97)
+        r = randrange(10+26) # 10 numbers, 26*2 letters
+        if (r < 10): return chr(r+48)
+        else: return chr(r-10+97)
