@@ -1,4 +1,4 @@
-from highrollers.CardDeck import CardDeck
+from highrollers.card_deck import CardDeck
 from highrollers.random_api import RandomAPI
 from ..BaseGame import BaseGame
 
