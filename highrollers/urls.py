@@ -17,6 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from .GameManager import GameManager
+
+from . import views
+
+game_manager = GameManager()
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('test/', views.draw_page, {"game":'test'}),
+    path('api/test/', game_manager.handle_client_message, {"game":'test'}),
+    path('blackjack/', views.draw_page, {"game":'blackjack'}),
+    path('api/blackjack/', game_manager.handle_client_message, {"game":'blackjack'}),
 ]
