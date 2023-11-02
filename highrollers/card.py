@@ -2,7 +2,7 @@
 Luna Steed
 High Rollers Card Class
 This class facilitates cards for all card games.
-Very simply, it is a container to keep both an integer and a character
+Very simply, it is a container to keep both an integer and a character.
 """
 
 
