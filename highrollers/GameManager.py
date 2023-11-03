@@ -1,6 +1,8 @@
 from random import randrange
+import json
 
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .games.test.TestGame import TestGame
 from .games.blackjack.BlackjackGame import BlackjackGame
@@ -27,10 +29,17 @@ class GameManager:
     def delete_game(self, id:str) -> BaseGame:
         return self.games.pop(id)
     
+    @csrf_exempt
     def handle_client_message(self, request:WSGIRequest, game:str):
         """Send the client's message to the appropriate game"""
-        message = request.GET.dict()
+
+        if (request.body == b''):
+            return JsonResponse({"Error": "No body given!"})
+
+        print(request.body)
+        message = json.loads(request.body)
         print(message)
+
         response_message = ""
         if "data" in message and message["data"]:
             if "id" in message and message["id"] in self.games.keys():
