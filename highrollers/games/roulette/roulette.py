@@ -37,3 +37,13 @@ class Roulette:
             return True
         else:
             return False
+
+    def check_nums(self, numlist: list[int]) -> bool:
+        """Checks the spun number against the given list of integers bet upon."""
+        if self.spunnum is None:
+            raise ValueError("Roulette wheel has not been spun yet!")
+        if self.spunnum in numlist:
+            return True
+        else:
+            return False
+
